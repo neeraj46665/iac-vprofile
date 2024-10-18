@@ -52,10 +52,11 @@ jobs:
 
       
       
-        # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan
+        id: plan
+        run: terraform plan -color=false -input=false -out=planfile -chdir=./terraform  # Change './terraform' to your configuration directory
         continue-on-error: true
+
 
 
       # Step 7: Check Plan Status
