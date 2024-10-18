@@ -23,44 +23,32 @@ env:
 
 jobs:
   terraform:
-    name: Terraform Workflow
+    name: "Apply Terraform Code Changes"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform  # Ensure this points to your Terraform directory
 
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # Step 2: Setup Terraform
-      - name: Setup Terraform
+      - name: Set Up Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.5.0  # Set the version you want to use
 
-      # Step 3: Terraform init
       - name: Terraform Init
-        run: terraform init -backend-config="bucket=${{env.BUCKET_TF_STATE}}" -backend-config="region=${{env.AWS_REGION}}"
+        id: init
+        run: terraform init -backend-config="bucket=${{ secrets.BUCKET_TF_STATE }}"
 
-      # Step 4: Terraform fmt check
       - name: Terraform Format Check
         run: terraform fmt --check
-        continue-on-error: true # Continue even if format check fails
 
-      # Step 5: Terraform Validate
       - name: Terraform Validate
         run: terraform validate
 
-      
-      
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false -out planfile
-        continue-on-error: true
+        run: terraform plan -no-color -input=false -out=planfile
 
-
-
-
-      # Step 7: Check Plan Status
-      - name: Check Plan Outcome
-        if: ${{ failure() && steps.plan.outcome == 'failure' }}
-        run: exit 1
+      # Apply step removed for now
