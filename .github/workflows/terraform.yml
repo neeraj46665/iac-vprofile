@@ -54,7 +54,7 @@ jobs:
       
         # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -color=false -input=false -out=planfile
+        run: terraform plan
         continue-on-error: true
 
 
