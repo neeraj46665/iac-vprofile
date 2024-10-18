@@ -50,10 +50,13 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      # Step 6: Terraform Plan
+      
+      
+        # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan --no-color -input=false -out planfile
+        run: terraform plan -color=false -input=false -out=planfile
         continue-on-error: true
+
 
       # Step 7: Check Plan Status
       - name: Check Plan Outcome
